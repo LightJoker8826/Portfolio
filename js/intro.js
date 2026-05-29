@@ -1,6 +1,8 @@
 // ─── GAME SELECT LOGIC ──────────────────────────────────────────────
 
 (function () {
+  const intro        = document.getElementById('intro');
+  const video        = document.getElementById('intro-video');
   const flashEl      = document.getElementById('flash-overlay');
   const selectScreen = document.getElementById('game-select');
   const selectTiles  = document.getElementById('select-tiles');
@@ -27,8 +29,24 @@
     selectTiles.appendChild(tile);
   });
 
-  // Always show game select on load
-  showGameSelect();
+  // ── Run Video Intro ────────────────────────────────────────────────────
+  function endIntro() {
+    if (intro.classList.contains('hidden')) return; // Already ended
+    flashEl.classList.add('flash');
+    setTimeout(() => {
+      intro.classList.add('hidden');
+      showGameSelect();
+    }, 300);
+  }
+
+  // When video ends, go to game select
+  if (video) {
+    video.addEventListener('ended', endIntro);
+    // Fallback just in case video fails or is too long
+    setTimeout(endIntro, 6000); 
+  } else {
+    endIntro();
+  }
 
   function showGameSelect() {
     selectScreen.classList.remove('hidden');

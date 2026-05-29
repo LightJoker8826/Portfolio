@@ -68,6 +68,28 @@ a { text-decoration: none; color: inherit; }
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
+   INTRO SCREEN
+════════════════════════════════════════════════════════════════════════════ */
+#intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+}
+
+#intro-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
    GAME SELECT SCREEN
 ════════════════════════════════════════════════════════════════════════════ */
 #game-select {
