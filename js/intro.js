@@ -29,9 +29,12 @@
     selectTiles.appendChild(tile);
   });
 
+  const INTRO_DURATION = 7000;
+
   // ── Run Video Intro ────────────────────────────────────────────────────
   function endIntro() {
     if (intro.classList.contains('hidden')) return; // Already ended
+    if (video) video.pause();
     flashEl.classList.add('flash');
     setTimeout(() => {
       intro.classList.add('hidden');
@@ -39,11 +42,9 @@
     }, 300);
   }
 
-  // When video ends, go to game select
   if (video) {
-    video.addEventListener('ended', endIntro);
-    // Fallback just in case video fails or is too long
-    setTimeout(endIntro, 6000); 
+    video.play().catch(() => {});
+    setTimeout(endIntro, INTRO_DURATION);
   } else {
     endIntro();
   }
