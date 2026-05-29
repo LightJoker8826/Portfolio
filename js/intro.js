@@ -1,22 +1,10 @@
-// ─── INTRO + GAME SELECT LOGIC ──────────────────────────────────────────────
+// ─── GAME SELECT LOGIC ──────────────────────────────────────────────
 
 (function () {
-  const intro       = document.getElementById('intro');
-  const flashEl     = document.getElementById('flash-overlay');
-  const systemText  = document.getElementById('system-text');
-  const linkStart   = document.getElementById('link-start-text');
-  const arcCircle   = document.getElementById('arc-circle');
+  const flashEl      = document.getElementById('flash-overlay');
   const selectScreen = document.getElementById('game-select');
   const selectTiles  = document.getElementById('select-tiles');
   const mainEl       = document.getElementById('main');
-  const video        = document.getElementById('intro-video');
-
-  // ── Arc circumference ──────────────────────────────────────────────────
-  const CIRC = 2 * Math.PI * 90; // r=90
-  arcCircle.style.strokeDasharray  = CIRC;
-  arcCircle.style.strokeDashoffset = CIRC;
-
-  const savedTheme = getSavedTheme();
 
   // ── Build game-select tiles from registry ──────────────────────────────
   THEMES.forEach(theme => {
@@ -39,67 +27,8 @@
     selectTiles.appendChild(tile);
   });
 
-  // ── Run intro sequence ─────────────────────────────────────────────────
-  runIntro();
-
-  function runIntro() {
-    // Phase 1: brief white hold then fade to reveal video + rings
-    setTimeout(() => {
-      intro.classList.add('reveal-video');
-    }, 200);
-
-    // Phase 2: type system text
-    setTimeout(() => {
-      typeText(systemText, 'NERVE GEAR SYSTEM ONLINE', 60, () => {
-        // Phase 3: fill arc
-        fillArc(1800, () => {
-          // Phase 4: LINK START slam
-          linkStart.classList.add('active');
-          setTimeout(() => {
-            // Phase 5: white flash → game select
-            flashEl.classList.add('flash');
-            setTimeout(() => {
-              intro.classList.add('hidden');
-              if (savedTheme && getThemeById(savedTheme)) {
-                applyTheme(savedTheme, true);
-                showPortfolio();
-              } else {
-                showGameSelect();
-              }
-            }, 400);
-          }, 1000);
-        });
-      });
-    }, 900);
-  }
-
-  function typeText(el, text, delay, cb) {
-    el.classList.add('visible');
-    el.textContent = '';
-    let i = 0;
-    const interval = setInterval(() => {
-      el.textContent += text[i];
-      i++;
-      if (i >= text.length) {
-        clearInterval(interval);
-        if (cb) cb();
-      }
-    }, delay);
-  }
-
-  function fillArc(duration, cb) {
-    const start = performance.now();
-    function step(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      arcCircle.style.strokeDashoffset = CIRC * (1 - progress);
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        if (cb) cb();
-      }
-    }
-    requestAnimationFrame(step);
-  }
+  // Always show game select on load
+  showGameSelect();
 
   function showGameSelect() {
     selectScreen.classList.remove('hidden');

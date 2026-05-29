@@ -223,3 +223,40 @@ document.addEventListener('themeapplied', () => {
     setTimeout(() => { bar.style.width = '100%'; }, 100);
   }
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PROJECT MODAL
+// ═══════════════════════════════════════════════════════════════════════════
+const modal = document.getElementById('project-modal');
+const modalBody = document.querySelector('.modal-body');
+const modalClose = document.querySelector('.modal-close');
+const modalBackdrop = document.querySelector('.modal-backdrop');
+
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('click', (e) => {
+    if (e.target.tagName.toLowerCase() === 'a') return; // Don't open modal if clicking the direct link
+
+    const title = card.querySelector('h3').textContent;
+    const desc = card.querySelector('p').innerHTML;
+    const link = card.querySelector('.card-link');
+    const category = card.querySelector('.card-category').textContent;
+    
+    let html = `<div class="card-category">${category}</div><h3>${title}</h3><p>${desc}</p>`;
+    if (link) {
+      html += `<a href="${link.href}" target="_blank" rel="noopener" class="card-link">${link.textContent}</a>`;
+    }
+    
+    modalBody.innerHTML = html;
+    modal.classList.add('open');
+  });
+});
+
+function closeModal() {
+  modal.classList.remove('open');
+}
+
+modalClose.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', closeModal);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});

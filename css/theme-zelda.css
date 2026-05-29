@@ -155,16 +155,34 @@
 }
 
 /* ── Project cards — OoT item slots ─────────────────────────────────────── */
+[data-theme="zelda"] .project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  background: #000008;
+  padding: 16px;
+  border: 4px solid #1a2a3a;
+  border-radius: 4px;
+  box-shadow:
+    inset 4px 4px 0 rgba(0,0,0,0.8),
+    inset -2px -2px 0 rgba(255,255,255,0.1),
+    0 4px 20px rgba(0,0,0,0.8);
+}
 [data-theme="zelda"] .project-card {
+  aspect-ratio: 1 / 1;
   background: #1c2e40;
   border: 3px solid #0a1a2a;
   border-radius: 2px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow:
     inset 3px 3px 0 rgba(255,255,255,0.10),
-    inset -3px -3px 0 rgba(0,0,0,0.50),
-    0 4px 20px rgba(0,0,0,0.6);
+    inset -3px -3px 0 rgba(0,0,0,0.50);
   position: relative;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
 }
 [data-theme="zelda"] .project-card:hover {
   transform: translateY(-3px);
@@ -197,29 +215,29 @@
   height: 20px;
 }
 
-[data-theme="zelda"] .card-category {
-  font-family: 'VT323', monospace;
-  font-size: 0.95rem;
-  color: #7ec8e3;
-  letter-spacing: 0.1em;
+[data-theme="zelda"] .project-card p,
+[data-theme="zelda"] .project-card h3,
+[data-theme="zelda"] .project-card .card-category,
+[data-theme="zelda"] .project-card .card-link {
+  display: none;
 }
-[data-theme="zelda"] .project-card h3 {
-  font-family: 'VT323', monospace;
-  font-size: 1.3rem;
-  color: #fff5cc;
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.7);
-}
-[data-theme="zelda"] .project-card p { color: #9a8060; }
 
-[data-theme="zelda"] .card-link {
-  font-family: 'VT323', monospace;
-  font-size: 1rem;
-  color: #c8a800;
-  border-color: #c8a800;
-  background: #0a1520;
-  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.08), inset -1px -1px 0 rgba(0,0,0,0.4);
+[data-theme="zelda"] .project-card .card-icon {
+  display: block;
+  font-size: 2.5rem;
+  filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.8));
 }
-[data-theme="zelda"] .card-link:hover { background: #c8a800; color: #000; }
+
+[data-theme="zelda"] .project-card .card-qty {
+  display: block;
+  position: absolute;
+  bottom: 2px;
+  left: 6px;
+  font-family: 'VT323', monospace;
+  font-size: 1.2rem;
+  color: #7fff00;
+  text-shadow: 2px 2px 0 #000;
+}
 
 /* ── GitHub panel ────────────────────────────────────────────────────────── */
 [data-theme="zelda"] .github-panel {

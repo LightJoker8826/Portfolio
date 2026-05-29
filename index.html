@@ -16,31 +16,6 @@
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════════════════════
-     INTRO SCREEN
-════════════════════════════════════════════════════════════════════════════ -->
-<div id="intro">
-  <video id="intro-video" autoplay muted loop playsinline>
-    <source src="assets/sao-intro.mp4" type="video/mp4">
-  </video>
-
-  <div id="intro-overlay">
-    <!-- Spinning rings + SVG arc -->
-    <div id="rings-container">
-      <div class="ring ring-1"></div>
-      <div class="ring ring-2"></div>
-      <div class="ring ring-3"></div>
-      <svg id="progress-arc" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <circle class="arc-bg"   cx="100" cy="100" r="90"/>
-        <circle class="arc-fill" cx="100" cy="100" r="90" id="arc-circle"/>
-      </svg>
-    </div>
-
-    <div id="system-text"></div>
-    <div id="link-start-text">LINK START</div>
-  </div>
-</div>
-
 <!-- White flash overlay (shared between screens) -->
 <div id="flash-overlay"></div>
 
@@ -109,42 +84,54 @@
     <div class="project-grid">
 
       <div class="project-card" data-category="CODING">
+        <div class="card-icon">⚡</div>
         <div class="card-category">CODING</div>
+        <div class="card-qty">50</div>
         <h3>Microbit "MIKU MIKU BEAM"</h3>
         <p>Programmed the LED matrix of a BBC micro:bit using MicroPython to scroll
            and display the "Miku Miku Beam" pattern — a fun dive into embedded coding.</p>
       </div>
 
       <div class="project-card" data-category="CODING">
+        <div class="card-icon">📜</div>
         <div class="card-category">CODING</div>
+        <div class="card-qty">0</div>
         <h3>Choose Your Own Adventure</h3>
         <p>A branching narrative story built for Exploring Computer Science — multiple
            paths, player choices, and outcomes written in Python.</p>
       </div>
 
       <div class="project-card" data-category="HARDWARE">
+        <div class="card-icon">🔧</div>
         <div class="card-category">HARDWARE</div>
+        <div class="card-qty">1</div>
         <h3>Nintendo Switch Repair + Picofly Mod</h3>
         <p>Diagnosed a blown capacitor on the CPU board, performed a micro-soldering
            repair, then installed a Picofly chip for a hardware modification.</p>
       </div>
 
       <div class="project-card" data-category="CODING">
+        <div class="card-icon">🔘</div>
         <div class="card-category">CODING</div>
+        <div class="card-qty">30</div>
         <h3>Microbit Button Press</h3>
         <p>Event-driven micro:bit project — pressing the button pauses audio
            output and releases it on button-up, demonstrating interrupt handling.</p>
       </div>
 
       <div class="project-card" data-category="MUSIC">
+        <div class="card-icon">🎵</div>
         <div class="card-category">MUSIC</div>
+        <div class="card-qty">40</div>
         <h3>EarSketch Ringtone</h3>
         <p>Composed an original ringtone using EarSketch and Python — layered
            beats, samples, and effects for the Exploring Computer Science class.</p>
       </div>
 
       <div class="project-card featured" data-category="ROBOTICS">
+        <div class="card-icon">🤖</div>
         <div class="card-category">ROBOTICS</div>
+        <div class="card-qty">1</div>
         <h3>Chopper-CP-10P</h3>
         <p>Custom robotics build written in C++ — autonomous operation logic,
            sensor integration, and drive control for a competition-ready robot.</p>
@@ -215,6 +202,15 @@
   <footer>
     <span>SURENDRA SINGH // 2026</span>
   </footer>
+
+  <!-- ── PROJECT MODAL ─────────────────────────────────────────────────── -->
+  <div id="project-modal" class="hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close">✕</button>
+      <div class="modal-body"></div>
+    </div>
+  </div>
 
 </main>
 
