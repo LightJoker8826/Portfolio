@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="sao">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surendra Singh // Portfolio</title>
+
+  <!-- Base styles (layout + intro) -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Theme stylesheet injected dynamically by themes.js -->
+
+  <!-- Google Fonts preload -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300&family=VT323&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     INTRO SCREEN
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="intro">
+  <video id="intro-video" autoplay muted loop playsinline>
+    <source src="assets/sao-intro.mp4" type="video/mp4">
+  </video>
+
+  <div id="intro-overlay">
+    <!-- Spinning rings + SVG arc -->
+    <div id="rings-container">
+      <div class="ring ring-1"></div>
+      <div class="ring ring-2"></div>
+      <div class="ring ring-3"></div>
+      <svg id="progress-arc" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle class="arc-bg"   cx="100" cy="100" r="90"/>
+        <circle class="arc-fill" cx="100" cy="100" r="90" id="arc-circle"/>
+      </svg>
+    </div>
+
+    <div id="system-text"></div>
+    <div id="link-start-text">LINK START</div>
+  </div>
+</div>
+
+<!-- White flash overlay (shared between screens) -->
+<div id="flash-overlay"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     GAME SELECT SCREEN
+════════════════════════════════════════════════════════════════════════════ -->
+<div id="game-select" class="hidden">
+  <div id="select-title">SELECT WORLD</div>
+  <div id="select-tiles">
+    <!-- Tiles generated from THEMES registry in intro.js -->
+  </div>
+  <div id="select-hint">CHOOSE YOUR WORLD</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MAIN PORTFOLIO
+════════════════════════════════════════════════════════════════════════════ -->
+<main id="main" class="hidden">
+
+  <!-- Background canvas (particles / stars) -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- ── NAV ──────────────────────────────────────────────────────────── -->
+  <nav id="nav">
+    <span class="nav-logo">SS</span>
+    <ul>
+      <li><a href="#hero">HOME</a></li>
+      <li><a href="#projects"
+             data-theme-key="sectionProjects"
+             data-theme-text>QUEST LOG</a></li>
+      <li><a href="#github"
+             data-theme-key="sectionGithub"
+             data-theme-text>GITHUB</a></li>
+      <li><a href="#achievements"
+             data-theme-key="sectionAchievements"
+             data-theme-text>ACHIEVEMENTS</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ─────────────────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="hero-tag"
+           data-theme-key="heroTag"
+           data-theme-text>[ PLAYER DATA ]</div>
+
+      <h1 id="hero-name">SURENDRA SINGH</h1>
+
+      <div class="hero-subtitle">// CONSUMNES OAKS HIGH SCHOOL</div>
+
+      <div class="skill-bars">
+        <div class="skill-bar" data-label="CODING"   data-value="85"></div>
+        <div class="skill-bar" data-label="ROBOTICS"  data-value="78"></div>
+        <div class="skill-bar" data-label="HARDWARE"  data-value="72"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ──────────────────────────────────────────────────────── -->
+  <section id="projects">
+    <h2 class="section-title"
+        data-theme-key="sectionProjects"
+        data-theme-text>QUEST LOG</h2>
+
+    <div class="project-grid">
+
+      <div class="project-card" data-category="CODING">
+        <div class="card-category">CODING</div>
+        <h3>Microbit "MIKU MIKU BEAM"</h3>
+        <p>Programmed the LED matrix of a BBC micro:bit using MicroPython to scroll
+           and display the "Miku Miku Beam" pattern — a fun dive into embedded coding.</p>
+      </div>
+
+      <div class="project-card" data-category="CODING">
+        <div class="card-category">CODING</div>
+        <h3>Choose Your Own Adventure</h3>
+        <p>A branching narrative story built for Exploring Computer Science — multiple
+           paths, player choices, and outcomes written in Python.</p>
+      </div>
+
+      <div class="project-card" data-category="HARDWARE">
+        <div class="card-category">HARDWARE</div>
+        <h3>Nintendo Switch Repair + Picofly Mod</h3>
+        <p>Diagnosed a blown capacitor on the CPU board, performed a micro-soldering
+           repair, then installed a Picofly chip for a hardware modification.</p>
+      </div>
+
+      <div class="project-card" data-category="CODING">
+        <div class="card-category">CODING</div>
+        <h3>Microbit Button Press</h3>
+        <p>Event-driven micro:bit project — pressing the button pauses audio
+           output and releases it on button-up, demonstrating interrupt handling.</p>
+      </div>
+
+      <div class="project-card" data-category="MUSIC">
+        <div class="card-category">MUSIC</div>
+        <h3>EarSketch Ringtone</h3>
+        <p>Composed an original ringtone using EarSketch and Python — layered
+           beats, samples, and effects for the Exploring Computer Science class.</p>
+      </div>
+
+      <div class="project-card featured" data-category="ROBOTICS">
+        <div class="card-category">ROBOTICS</div>
+        <h3>Chopper-CP-10P</h3>
+        <p>Custom robotics build written in C++ — autonomous operation logic,
+           sensor integration, and drive control for a competition-ready robot.</p>
+        <a href="https://github.com/LightJoker8826/Chopper-CP-10P"
+           target="_blank" rel="noopener" class="card-link">VIEW ON GITHUB →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── GITHUB ────────────────────────────────────────────────────────── -->
+  <section id="github">
+    <h2 class="section-title"
+        data-theme-key="sectionGithub"
+        data-theme-text>GITHUB TERMINAL</h2>
+
+    <div class="github-panel">
+      <div class="github-avatar">LJ</div>
+      <div class="github-info">
+        <div class="github-username">LightJoker8826</div>
+        <div class="github-sub">github.com/LightJoker8826</div>
+        <a href="https://github.com/LightJoker8826"
+           target="_blank" rel="noopener" class="github-link">OPEN PROFILE →</a>
+      </div>
+    </div>
+
+    <div class="repo-card">
+      <div class="repo-lang">C++</div>
+      <div class="repo-name">Chopper-CP-10P</div>
+      <div class="repo-desc">Custom robotics project with autonomous operation and sensor integration</div>
+      <a href="https://github.com/LightJoker8826/Chopper-CP-10P"
+         target="_blank" rel="noopener" class="card-link">VIEW REPO →</a>
+    </div>
+  </section>
+
+  <!-- ── ACHIEVEMENTS ──────────────────────────────────────────────────── -->
+  <section id="achievements">
+    <h2 class="section-title"
+        data-theme-key="sectionAchievements"
+        data-theme-text>ACHIEVEMENTS</h2>
+
+    <div class="achievement-card">
+      <div class="achievement-icon">★</div>
+      <div class="achievement-info">
+        <div class="achievement-title">Skills USA — Certification of Achievement</div>
+        <div class="achievement-sub">Consumnes Oaks High School</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ───────────────────────────────────────────────────────── -->
+  <section id="contact">
+    <h2 class="section-title"
+        data-theme-key="sectionContact"
+        data-theme-text>CONTACT</h2>
+
+    <div class="contact-panel">
+      <div class="contact-prompt"
+           data-theme-key="contactPrompt"
+           data-theme-html
+           data-theme-text>&gt; SEND MESSAGE</div>
+      <a href="mailto:SurendraSingh8826@outlook.com"
+         class="contact-email">SurendraSingh8826@outlook.com</a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────────────────────────── -->
+  <footer>
+    <span>SURENDRA SINGH // 2026</span>
+  </footer>
+
+</main>
+
+<!-- ── THEME SWITCHER (fixed bottom-right) ────────────────────────────────── -->
+<button id="theme-switcher" title="Switch Theme">⚔</button>
+
+<!-- Scripts: registry first, then intro, then background/animations -->
+<script src="js/themes.js"></script>
+<script src="js/intro.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

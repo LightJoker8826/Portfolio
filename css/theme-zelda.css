@@ -1,0 +1,339 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   ZELDA THEME — Ocarina of Time Pause / Inventory Screen
+════════════════════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Lato:wght@300;400;700&display=swap');
+
+[data-theme="zelda"] {
+  --bg:          #000008;
+  --bg2:         #000010;
+  --panel:       #1c2e40;
+  --border:      #c8a800;
+  --accent:      #c8a800;
+  --accent2:     #7ec8e3;
+  --text:        #fff5cc;
+  --text-dim:    #9a8060;
+  --header-font: 'VT323', monospace;
+  --body-font:   'Lato', sans-serif;
+  --glow:        0 0 10px #c8a800, 0 0 22px rgba(200,168,0,0.3);
+  --card-glow:   inset 2px 2px 0 rgba(255,255,255,0.12),
+                 inset -2px -2px 0 rgba(0,0,0,0.45);
+  --radius:      2px;
+  --bevel-light: rgba(255,255,255,0.12);
+  --bevel-dark:  rgba(0,0,0,0.55);
+}
+
+[data-theme="zelda"] body { background: var(--bg); font-family: var(--body-font); }
+
+/* ── OoT outer frame (dark stone border around everything) ──────────────── */
+[data-theme="zelda"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 8px #0a1520,
+    inset 0 0 0 10px rgba(255,255,255,0.04),
+    inset 0 0 0 12px #05101a;
+}
+
+/* ── NAV styled as OoT top bar ───────────────────────────────────────────── */
+[data-theme="zelda"] #nav {
+  background: #0a1830;
+  border-bottom: 3px solid #c8a800;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.08),
+    0 4px 12px rgba(0,0,0,0.8);
+  height: 68px;
+}
+[data-theme="zelda"] .nav-logo {
+  font-family: 'VT323', monospace;
+  font-size: 1.8rem;
+  letter-spacing: 0.05em;
+  color: #c8a800;
+}
+[data-theme="zelda"] #nav a {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  color: #9a8060;
+}
+[data-theme="zelda"] #nav a:hover { color: #c8a800; text-shadow: 0 0 8px #c8a800; }
+
+/* ── Heart row in hero ───────────────────────────────────────────────────── */
+[data-theme="zelda"] #hero::before {
+  content: '♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥ ♥';
+  display: block;
+  font-size: 1rem;
+  color: #cc0000;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-shadow: 0 0 6px rgba(200,0,0,0.4);
+  animation: hearts-pulse 2s ease-in-out infinite alternate;
+}
+@keyframes hearts-pulse {
+  from { opacity: 0.85; }
+  to   { opacity: 1; }
+}
+
+/* Magic bar */
+[data-theme="zelda"] #hero::after {
+  content: '';
+  display: block;
+  height: 10px;
+  max-width: 320px;
+  background: #0a2a0a;
+  border: 2px solid #2a5a2a;
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,0.4), inset -2px -2px 0 rgba(255,255,255,0.05);
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Hero name ───────────────────────────────────────────────────────────── */
+[data-theme="zelda"] #hero-name {
+  font-family: 'VT323', monospace;
+  font-size: clamp(3rem, 9vw, 7rem);
+  letter-spacing: 0.04em;
+  color: #fff5cc;
+  text-shadow: 0 0 12px rgba(200,168,0,0.35), 2px 2px 0 rgba(0,0,0,0.8);
+}
+[data-theme="zelda"] .hero-subtitle {
+  font-family: 'VT323', monospace;
+  font-size: 1.4rem;
+  color: #9a8060;
+  letter-spacing: 0.08em;
+}
+[data-theme="zelda"] .hero-tag {
+  font-family: 'VT323', monospace;
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  color: #c8a800;
+}
+
+/* ── Skill bars ──────────────────────────────────────────────────────────── */
+[data-theme="zelda"] .skill-track {
+  background: #0a1520;
+  border: 2px solid #2a3a50;
+  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.5), inset -1px -1px 0 rgba(255,255,255,0.04);
+  height: 10px;
+}
+[data-theme="zelda"] .skill-fill {
+  background: linear-gradient(90deg, #2ecc40, #7fff00);
+  box-shadow: 0 0 6px rgba(46,204,64,0.5);
+}
+[data-theme="zelda"] .skill-label { font-family: 'VT323', monospace; font-size: 1rem; color: #c8a800; }
+[data-theme="zelda"] .skill-val   { font-family: 'VT323', monospace; font-size: 1rem; color: #9a8060; }
+
+/* ── Section title — OoT banner style ───────────────────────────────────── */
+[data-theme="zelda"] .section-title {
+  font-family: 'VT323', monospace;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  letter-spacing: 0.12em;
+  color: #fff5cc;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+  background: #0f2030;
+  border: none;
+  border-top: 3px solid #c8a800;
+  border-bottom: 3px solid #c8a800;
+  padding: 8px 24px;
+  display: inline-block;
+  margin-bottom: 32px;
+  box-shadow:
+    inset 2px 2px 0 var(--bevel-light),
+    inset -2px -2px 0 var(--bevel-dark),
+    0 4px 16px rgba(0,0,0,0.6);
+  position: relative;
+}
+/* Gold corner marks */
+[data-theme="zelda"] .section-title::before,
+[data-theme="zelda"] .section-title::after {
+  content: '◆';
+  color: #c8a800;
+  margin: 0 10px;
+  font-size: 0.8em;
+}
+
+/* ── Project cards — OoT item slots ─────────────────────────────────────── */
+[data-theme="zelda"] .project-card {
+  background: #1c2e40;
+  border: 3px solid #0a1a2a;
+  border-radius: 2px;
+  box-shadow:
+    inset 3px 3px 0 rgba(255,255,255,0.10),
+    inset -3px -3px 0 rgba(0,0,0,0.50),
+    0 4px 20px rgba(0,0,0,0.6);
+  position: relative;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+[data-theme="zelda"] .project-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 3px 3px 0 rgba(255,255,255,0.15),
+    inset -3px -3px 0 rgba(0,0,0,0.55),
+    0 0 0 2px #c8a800,
+    0 0 16px rgba(200,168,0,0.4),
+    0 6px 24px rgba(0,0,0,0.7);
+}
+
+/* Animated gold cursor brackets on hover */
+[data-theme="zelda"] .project-card::before,
+[data-theme="zelda"] .project-card::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: #c8a800;
+  border-style: solid;
+  opacity: 0;
+  transition: opacity 0.25s ease, width 0.25s ease, height 0.25s ease;
+}
+[data-theme="zelda"] .project-card::before { top: 6px; left: 6px; border-width: 2px 0 0 2px; }
+[data-theme="zelda"] .project-card::after  { bottom: 6px; right: 6px; border-width: 0 2px 2px 0; }
+[data-theme="zelda"] .project-card:hover::before,
+[data-theme="zelda"] .project-card:hover::after {
+  opacity: 1;
+  width: 20px;
+  height: 20px;
+}
+
+[data-theme="zelda"] .card-category {
+  font-family: 'VT323', monospace;
+  font-size: 0.95rem;
+  color: #7ec8e3;
+  letter-spacing: 0.1em;
+}
+[data-theme="zelda"] .project-card h3 {
+  font-family: 'VT323', monospace;
+  font-size: 1.3rem;
+  color: #fff5cc;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.7);
+}
+[data-theme="zelda"] .project-card p { color: #9a8060; }
+
+[data-theme="zelda"] .card-link {
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  color: #c8a800;
+  border-color: #c8a800;
+  background: #0a1520;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.08), inset -1px -1px 0 rgba(0,0,0,0.4);
+}
+[data-theme="zelda"] .card-link:hover { background: #c8a800; color: #000; }
+
+/* ── GitHub panel ────────────────────────────────────────────────────────── */
+[data-theme="zelda"] .github-panel {
+  background: #1c2e40;
+  border: 3px solid #0a1a2a;
+  box-shadow:
+    inset 3px 3px 0 rgba(255,255,255,0.10),
+    inset -3px -3px 0 rgba(0,0,0,0.50),
+    0 4px 20px rgba(0,0,0,0.5);
+}
+[data-theme="zelda"] .github-avatar {
+  background: linear-gradient(135deg, #c8a800, #7ec8e3);
+}
+[data-theme="zelda"] .github-username { font-family: 'VT323', monospace; font-size: 1.4rem; color: #fff5cc; }
+[data-theme="zelda"] .github-sub      { color: #9a8060; }
+[data-theme="zelda"] .github-link {
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  color: #c8a800;
+  border-color: #c8a800;
+  background: #0a1520;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.08), inset -1px -1px 0 rgba(0,0,0,0.4);
+}
+[data-theme="zelda"] .github-link:hover { background: #c8a800; color: #000; }
+
+[data-theme="zelda"] .repo-card {
+  background: #1c2e40;
+  border: 3px solid #0a1a2a;
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.08), inset -2px -2px 0 rgba(0,0,0,0.45);
+}
+[data-theme="zelda"] .repo-card:hover {
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.10),
+    inset -2px -2px 0 rgba(0,0,0,0.50),
+    0 0 0 2px #c8a800;
+}
+[data-theme="zelda"] .repo-lang   { font-family: 'VT323', monospace; font-size: 1rem; color: #7ec8e3; border-color: #7ec8e3; background: #0a1520; }
+[data-theme="zelda"] .repo-name   { font-family: 'VT323', monospace; font-size: 1.4rem; color: #fff5cc; }
+[data-theme="zelda"] .repo-desc   { color: #9a8060; }
+
+/* ── Achievement card ────────────────────────────────────────────────────── */
+[data-theme="zelda"] .achievement-card {
+  background: #1c2e40;
+  border: 3px solid #c8a800;
+  box-shadow:
+    inset 3px 3px 0 rgba(255,255,255,0.10),
+    inset -3px -3px 0 rgba(0,0,0,0.50),
+    0 0 20px rgba(200,168,0,0.25),
+    0 4px 20px rgba(0,0,0,0.6);
+}
+[data-theme="zelda"] .achievement-icon { font-size: 2.4rem; color: #c8a800; text-shadow: 0 0 12px #c8a800; }
+[data-theme="zelda"] .achievement-title { font-family: 'VT323', monospace; font-size: 1.3rem; color: #fff5cc; }
+[data-theme="zelda"] .achievement-sub   { color: #9a8060; }
+
+/* ── Contact panel ───────────────────────────────────────────────────────── */
+[data-theme="zelda"] .contact-panel {
+  background: #1c2e40;
+  border: 3px solid #c8a800;
+  box-shadow:
+    inset 3px 3px 0 rgba(255,255,255,0.10),
+    inset -3px -3px 0 rgba(0,0,0,0.50),
+    0 0 20px rgba(200,168,0,0.2);
+}
+[data-theme="zelda"] .contact-prompt {
+  font-family: 'VT323', monospace;
+  font-size: 1.6rem;
+  color: #c8a800;
+}
+[data-theme="zelda"] .contact-email { font-family: 'VT323', monospace; font-size: 1.1rem; border-bottom-color: #c8a800; color: #fff5cc; }
+[data-theme="zelda"] .contact-email:hover { color: #c8a800; }
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+[data-theme="zelda"] footer {
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  color: #9a8060;
+  border-top-color: rgba(200,168,0,0.2);
+}
+
+/* ── Theme switcher ──────────────────────────────────────────────────────── */
+[data-theme="zelda"] #theme-switcher {
+  background: #1c2e40;
+  border: 3px solid #c8a800;
+  color: #c8a800;
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,0.08), inset -2px -2px 0 rgba(0,0,0,0.4), 0 0 12px rgba(200,168,0,0.3);
+}
+
+/* ── Menu open animation ─────────────────────────────────────────────────── */
+.zelda-open {
+  animation: zelda-unfold 0.5s cubic-bezier(0.18,0.89,0.32,1.28) forwards;
+}
+@keyframes zelda-unfold {
+  from { transform: scale(0.92); opacity: 0.5; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+/* ── Gold button shimmer ─────────────────────────────────────────────────── */
+[data-theme="zelda"] .card-link,
+[data-theme="zelda"] .github-link {
+  position: relative;
+  overflow: hidden;
+}
+[data-theme="zelda"] .card-link::after,
+[data-theme="zelda"] .github-link::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  animation: gold-shimmer 3s ease-in-out infinite;
+}
+@keyframes gold-shimmer {
+  0%   { left: -60%; }
+  60%  { left: 130%; }
+  100% { left: 130%; }
+}
