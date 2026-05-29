@@ -8,6 +8,12 @@
   const selectTiles  = document.getElementById('select-tiles');
   const mainEl       = document.getElementById('main');
 
+  const INTRO_END = 7.3;   // seconds — initial clip ends here
+  const SAO_START = 13;    // seconds — SAO replay starts here
+
+  // Tracks which video phase is active (drives visibility resume)
+  let phase = 'initial-intro'; // initial-intro | game-select | sao-replay | done
+
   // ── Build game-select tiles from registry ──────────────────────────────
   THEMES.forEach(theme => {
     const tile = document.createElement('div');
@@ -29,12 +35,32 @@
     selectTiles.appendChild(tile);
   });
 
-  const INTRO_DURATION = 7300;
+  // ── Tab visibility — pause/resume video in sync ────────────────────────
+  document.addEventListener('visibilitychange', () => {
+    if (!video || phase === 'game-select' || phase === 'done') return;
 
-  // ── Run Video Intro ────────────────────────────────────────────────────
+    if (document.hidden) {
+      video.pause();
+    } else if (phase === 'initial-intro' || phase === 'sao-replay') {
+      video.play().catch(() => {});
+    }
+  });
+
+  // ── Initial intro — driven by video time, not a timer ─────────────────
+  function onInitialTimeUpdate() {
+    if (video.currentTime >= INTRO_END) {
+      video.removeEventListener('timeupdate', onInitialTimeUpdate);
+      endIntro();
+    }
+  }
+
   function endIntro() {
-    if (intro.classList.contains('hidden')) return; // Already ended
-    if (video) video.pause();
+    if (intro.classList.contains('hidden')) return;
+    phase = 'game-select';
+    video.removeEventListener('timeupdate', onInitialTimeUpdate);
+    video.pause();
+    flashEl.classList.remove('flash');
+    void flashEl.offsetWidth;
     flashEl.classList.add('flash');
     setTimeout(() => {
       intro.classList.add('hidden');
@@ -43,29 +69,27 @@
   }
 
   if (video) {
+    video.addEventListener('timeupdate', onInitialTimeUpdate);
     video.play().catch(() => {});
-    setTimeout(endIntro, INTRO_DURATION);
   } else {
+    phase = 'game-select';
     endIntro();
   }
 
   function showGameSelect() {
     selectScreen.classList.remove('hidden');
     selectScreen.classList.add('visible');
-    // Stagger tile entrances
     const tiles = selectTiles.querySelectorAll('.select-tile');
     tiles.forEach((tile, i) => {
-      setTimeout(() => {
-        tile.classList.add('enter');
-      }, 150 + i * 200);
+      setTimeout(() => tile.classList.add('enter'), 150 + i * 200);
     });
   }
 
   function onThemeSelect(themeId, tile) {
-    // Lock-on animation
     tile.classList.add('locked');
-    const tiles = selectTiles.querySelectorAll('.select-tile');
-    tiles.forEach(t => { if (t !== tile) t.classList.add('fade-out'); });
+    selectTiles.querySelectorAll('.select-tile').forEach(t => {
+      if (t !== tile) t.classList.add('fade-out');
+    });
 
     setTimeout(() => {
       selectScreen.classList.add('hidden');
@@ -75,6 +99,7 @@
         return;
       }
 
+      phase = 'done';
       flashEl.classList.remove('flash');
       void flashEl.offsetWidth;
       flashEl.classList.add('flash');
@@ -86,10 +111,10 @@
   }
 
   function playSaoTransition(themeId) {
-    const SAO_START = 13;
+    phase = 'sao-replay';
 
     function finishSaoIntro() {
-      video.removeEventListener('ended', finishSaoIntro);
+      phase = 'done';
       video.pause();
       flashEl.classList.remove('flash');
       void flashEl.offsetWidth;
@@ -101,26 +126,25 @@
       }, 300);
     }
 
-    function startPlayback() {
-      function revealAndPlay() {
-        intro.classList.remove('hidden');
-        video.addEventListener('ended', finishSaoIntro, { once: true });
-        video.play().catch(finishSaoIntro);
-      }
+    function revealAndPlay() {
+      intro.classList.remove('hidden');
+      video.addEventListener('ended', finishSaoIntro, { once: true });
+      video.play().catch(finishSaoIntro);
+    }
 
+    function seekToStart() {
       if (Math.abs(video.currentTime - SAO_START) < 0.1) {
         revealAndPlay();
         return;
       }
-
       video.addEventListener('seeked', revealAndPlay, { once: true });
       video.currentTime = SAO_START;
     }
 
     if (video.readyState >= 1) {
-      startPlayback();
+      seekToStart();
     } else {
-      video.addEventListener('loadedmetadata', startPlayback, { once: true });
+      video.addEventListener('loadedmetadata', seekToStart, { once: true });
     }
   }
 
@@ -136,7 +160,6 @@
     const nextId = this.getAttribute('data-next') || THEMES[0].id;
     applyTheme(nextId);
 
-    // Trigger Zelda menu open animation when switching to it
     if (nextId === 'zelda') {
       const mainContent = document.querySelector('#main .main-content');
       if (mainContent) {
