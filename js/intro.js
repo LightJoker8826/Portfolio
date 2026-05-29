@@ -29,7 +29,7 @@
     selectTiles.appendChild(tile);
   });
 
-  const INTRO_DURATION = 7500;
+  const INTRO_DURATION = 7400;
 
   // ── Run Video Intro ────────────────────────────────────────────────────
   function endIntro() {
