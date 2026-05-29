@@ -6,7 +6,7 @@ SAO + Zelda: Ocarina of Time dual-theme portfolio. Built with plain HTML, CSS, a
 
 - **Link Start intro** — SAO NerveGear boot sequence with spinning rings, progress arc, and video background
 - **Game Select screen** — choose SAO or Zelda OoT theme after the intro
-- **Theme persistence** — choice saved in browser localStorage; return visits skip straight to your last theme
+- **Theme persistence** — choice saved in browser localStorage; the SAO intro plays every visit, then your saved theme loads automatically
 - **Theme switcher** — bottom-right button to swap themes anytime
 - **SAO theme** — black/cyan holographic HUD, hex grid, scanlines, particle canvas
 - **Zelda OoT theme** — N64 pause menu aesthetic, beveled stone panels, gold buttons, star field canvas

@@ -16,12 +16,7 @@
   arcCircle.style.strokeDasharray  = CIRC;
   arcCircle.style.strokeDashoffset = CIRC;
 
-  // ── Check for saved theme ──────────────────────────────────────────────
-  const saved = getSavedTheme();
-  if (saved) {
-    skipToPortfolio(saved);
-    return;
-  }
+  const savedTheme = getSavedTheme();
 
   // ── Build game-select tiles from registry ──────────────────────────────
   THEMES.forEach(theme => {
@@ -65,7 +60,12 @@
             flashEl.classList.add('flash');
             setTimeout(() => {
               intro.classList.add('hidden');
-              showGameSelect();
+              if (savedTheme && getThemeById(savedTheme)) {
+                applyTheme(savedTheme, true);
+                showPortfolio();
+              } else {
+                showGameSelect();
+              }
             }, 400);
           }, 1000);
         });
@@ -130,16 +130,6 @@
   }
 
   function showPortfolio() {
-    mainEl.classList.remove('hidden');
-    mainEl.classList.add('fade-in');
-    if (window.initBackground) window.initBackground();
-    if (window.initAnimations) window.initAnimations();
-  }
-
-  function skipToPortfolio(themeId) {
-    intro.classList.add('hidden');
-    selectScreen.classList.add('hidden');
-    applyTheme(themeId, true);
     mainEl.classList.remove('hidden');
     mainEl.classList.add('fade-in');
     if (window.initBackground) window.initBackground();
