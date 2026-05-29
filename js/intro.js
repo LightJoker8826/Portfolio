@@ -12,8 +12,9 @@
   const SAO_START = 13;    // seconds — SAO replay starts here
 
   let phase = 'initial-intro'; // initial-intro | game-select | sao-replay | done
-  let frozenTime = null;       // video position saved when tab is hidden
-  let pendingSaoEnd = false;   // SAO clip ended while tab was hidden
+  let frozenTime = null;
+  let lastVisibleTime = 0;   // furthest point actually watched while tab visible
+  let pendingSaoEnd = false;
   let saoFinishHandler = null;
 
   // ── Build game-select tiles from registry ──────────────────────────────
@@ -37,20 +38,23 @@
     selectTiles.appendChild(tile);
   });
 
-  // ── Tab visibility — freeze video position, never transition while hidden ─
+  function resumeVideoAt(time, onReady) {
+    if (Math.abs(video.currentTime - time) < 0.05) {
+      onReady();
+      return;
+    }
+    video.addEventListener('seeked', () => onReady(), { once: true });
+    video.currentTime = time;
+  }
+
+  // ── Tab visibility — freeze at last visible frame, resume after seek ───
   document.addEventListener('visibilitychange', () => {
     if (!video || phase === 'game-select' || phase === 'done') return;
 
     if (document.hidden) {
-      frozenTime = video.currentTime;
+      frozenTime = lastVisibleTime;
       video.pause();
       return;
-    }
-
-    // Tab is visible again — restore position and resume
-    if (frozenTime !== null) {
-      video.currentTime = frozenTime;
-      frozenTime = null;
     }
 
     if (pendingSaoEnd && phase === 'sao-replay' && saoFinishHandler) {
@@ -59,22 +63,28 @@
       return;
     }
 
+    const resumeAt = frozenTime !== null ? frozenTime : video.currentTime;
+    frozenTime = null;
+
     if (phase === 'initial-intro') {
-      if (video.currentTime >= INTRO_END) {
+      if (lastVisibleTime >= INTRO_END) {
         video.removeEventListener('timeupdate', onInitialTimeUpdate);
         endIntro();
-      } else {
-        video.play().catch(() => {});
+        return;
       }
+      resumeVideoAt(resumeAt, () => video.play().catch(() => {}));
     } else if (phase === 'sao-replay') {
-      video.play().catch(() => saoFinishHandler?.());
+      resumeVideoAt(resumeAt, () => video.play().catch(() => saoFinishHandler?.()));
     }
   });
 
-  // ── Initial intro — driven by video time, only while tab is visible ─────
+  // ── Initial intro — progress only counts while tab is visible ───────────
   function onInitialTimeUpdate() {
-    if (document.hidden) return;
-    if (video.currentTime >= INTRO_END) {
+    if (document.hidden || phase !== 'initial-intro') return;
+
+    lastVisibleTime = Math.max(lastVisibleTime, video.currentTime);
+
+    if (lastVisibleTime >= INTRO_END) {
       video.removeEventListener('timeupdate', onInitialTimeUpdate);
       endIntro();
     }
@@ -142,8 +152,10 @@
     phase = 'sao-replay';
     pendingSaoEnd = false;
     frozenTime = null;
+    lastVisibleTime = SAO_START;
 
     function finishSaoIntro() {
+      video.removeEventListener('timeupdate', onSaoTimeUpdate);
       if (document.hidden) {
         pendingSaoEnd = true;
         return;
@@ -165,8 +177,14 @@
 
     function revealAndPlay() {
       intro.classList.remove('hidden');
+      video.addEventListener('timeupdate', onSaoTimeUpdate);
       video.addEventListener('ended', finishSaoIntro, { once: true });
       video.play().catch(finishSaoIntro);
+    }
+
+    function onSaoTimeUpdate() {
+      if (document.hidden || phase !== 'sao-replay') return;
+      lastVisibleTime = Math.max(lastVisibleTime, video.currentTime);
     }
 
     function seekToStart() {
