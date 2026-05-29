@@ -102,10 +102,19 @@
     }
 
     function startPlayback() {
+      function revealAndPlay() {
+        intro.classList.remove('hidden');
+        video.addEventListener('ended', finishSaoIntro, { once: true });
+        video.play().catch(finishSaoIntro);
+      }
+
+      if (Math.abs(video.currentTime - SAO_START) < 0.1) {
+        revealAndPlay();
+        return;
+      }
+
+      video.addEventListener('seeked', revealAndPlay, { once: true });
       video.currentTime = SAO_START;
-      video.addEventListener('ended', finishSaoIntro, { once: true });
-      intro.classList.remove('hidden');
-      video.play().catch(finishSaoIntro);
     }
 
     if (video.readyState >= 1) {
