@@ -84,7 +84,7 @@
   }
 
   function playSaoTransition(themeId) {
-    const SAO_START = 12;
+    const SAO_START = 12.2;
 
     intro.classList.remove('hidden');
 
