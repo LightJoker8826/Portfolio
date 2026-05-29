@@ -68,13 +68,50 @@
     tiles.forEach(t => { if (t !== tile) t.classList.add('fade-out'); });
 
     setTimeout(() => {
+      flashEl.classList.remove('flash');
+      void flashEl.offsetWidth;
       flashEl.classList.add('flash');
       setTimeout(() => {
         selectScreen.classList.add('hidden');
-        applyTheme(themeId);
-        showPortfolio();
+        if (themeId === 'sao' && video) {
+          playSaoTransition(themeId);
+        } else {
+          applyTheme(themeId);
+          showPortfolio();
+        }
       }, 350);
     }, 700);
+  }
+
+  function playSaoTransition(themeId) {
+    const SAO_START = 12;
+
+    intro.classList.remove('hidden');
+
+    function finishSaoIntro() {
+      video.removeEventListener('ended', finishSaoIntro);
+      video.pause();
+      flashEl.classList.remove('flash');
+      void flashEl.offsetWidth;
+      flashEl.classList.add('flash');
+      setTimeout(() => {
+        intro.classList.add('hidden');
+        applyTheme(themeId);
+        showPortfolio();
+      }, 300);
+    }
+
+    function startPlayback() {
+      video.currentTime = SAO_START;
+      video.addEventListener('ended', finishSaoIntro);
+      video.play().catch(finishSaoIntro);
+    }
+
+    if (video.readyState >= 1) {
+      startPlayback();
+    } else {
+      video.addEventListener('loadedmetadata', startPlayback, { once: true });
+    }
   }
 
   function showPortfolio() {
