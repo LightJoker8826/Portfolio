@@ -68,25 +68,25 @@
     tiles.forEach(t => { if (t !== tile) t.classList.add('fade-out'); });
 
     setTimeout(() => {
+      selectScreen.classList.add('hidden');
+
+      if (themeId === 'sao' && video) {
+        playSaoTransition(themeId);
+        return;
+      }
+
       flashEl.classList.remove('flash');
       void flashEl.offsetWidth;
       flashEl.classList.add('flash');
       setTimeout(() => {
-        selectScreen.classList.add('hidden');
-        if (themeId === 'sao' && video) {
-          playSaoTransition(themeId);
-        } else {
-          applyTheme(themeId);
-          showPortfolio();
-        }
+        applyTheme(themeId);
+        showPortfolio();
       }, 350);
     }, 700);
   }
 
   function playSaoTransition(themeId) {
     const SAO_START = 13;
-
-    intro.classList.remove('hidden');
 
     function finishSaoIntro() {
       video.removeEventListener('ended', finishSaoIntro);
@@ -103,7 +103,8 @@
 
     function startPlayback() {
       video.currentTime = SAO_START;
-      video.addEventListener('ended', finishSaoIntro);
+      video.addEventListener('ended', finishSaoIntro, { once: true });
+      intro.classList.remove('hidden');
       video.play().catch(finishSaoIntro);
     }
 
