@@ -11,8 +11,10 @@
   const INTRO_END = 7.3;   // seconds — initial clip ends here
   const SAO_START = 13;    // seconds — SAO replay starts here
 
-  // Tracks which video phase is active (drives visibility resume)
   let phase = 'initial-intro'; // initial-intro | game-select | sao-replay | done
+  let frozenTime = null;       // video position saved when tab is hidden
+  let pendingSaoEnd = false;   // SAO clip ended while tab was hidden
+  let saoFinishHandler = null;
 
   // ── Build game-select tiles from registry ──────────────────────────────
   THEMES.forEach(theme => {
@@ -35,19 +37,43 @@
     selectTiles.appendChild(tile);
   });
 
-  // ── Tab visibility — pause/resume video in sync ────────────────────────
+  // ── Tab visibility — freeze video position, never transition while hidden ─
   document.addEventListener('visibilitychange', () => {
     if (!video || phase === 'game-select' || phase === 'done') return;
 
     if (document.hidden) {
+      frozenTime = video.currentTime;
       video.pause();
-    } else if (phase === 'initial-intro' || phase === 'sao-replay') {
-      video.play().catch(() => {});
+      return;
+    }
+
+    // Tab is visible again — restore position and resume
+    if (frozenTime !== null) {
+      video.currentTime = frozenTime;
+      frozenTime = null;
+    }
+
+    if (pendingSaoEnd && phase === 'sao-replay' && saoFinishHandler) {
+      pendingSaoEnd = false;
+      saoFinishHandler();
+      return;
+    }
+
+    if (phase === 'initial-intro') {
+      if (video.currentTime >= INTRO_END) {
+        video.removeEventListener('timeupdate', onInitialTimeUpdate);
+        endIntro();
+      } else {
+        video.play().catch(() => {});
+      }
+    } else if (phase === 'sao-replay') {
+      video.play().catch(() => saoFinishHandler?.());
     }
   });
 
-  // ── Initial intro — driven by video time, not a timer ─────────────────
+  // ── Initial intro — driven by video time, only while tab is visible ─────
   function onInitialTimeUpdate() {
+    if (document.hidden) return;
     if (video.currentTime >= INTRO_END) {
       video.removeEventListener('timeupdate', onInitialTimeUpdate);
       endIntro();
@@ -55,8 +81,9 @@
   }
 
   function endIntro() {
-    if (intro.classList.contains('hidden')) return;
+    if (document.hidden || intro.classList.contains('hidden')) return;
     phase = 'game-select';
+    saoFinishHandler = null;
     video.removeEventListener('timeupdate', onInitialTimeUpdate);
     video.pause();
     flashEl.classList.remove('flash');
@@ -100,6 +127,7 @@
       }
 
       phase = 'done';
+      saoFinishHandler = null;
       flashEl.classList.remove('flash');
       void flashEl.offsetWidth;
       flashEl.classList.add('flash');
@@ -112,9 +140,16 @@
 
   function playSaoTransition(themeId) {
     phase = 'sao-replay';
+    pendingSaoEnd = false;
+    frozenTime = null;
 
     function finishSaoIntro() {
+      if (document.hidden) {
+        pendingSaoEnd = true;
+        return;
+      }
       phase = 'done';
+      saoFinishHandler = null;
       video.pause();
       flashEl.classList.remove('flash');
       void flashEl.offsetWidth;
@@ -125,6 +160,8 @@
         showPortfolio();
       }, 300);
     }
+
+    saoFinishHandler = finishSaoIntro;
 
     function revealAndPlay() {
       intro.classList.remove('hidden');
