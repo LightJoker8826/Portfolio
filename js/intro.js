@@ -78,6 +78,26 @@
     }
   });
 
+  function fadeOutIntro(callback) {
+    intro.classList.remove('fade-out');
+    void intro.offsetWidth;
+    intro.classList.add('fade-out');
+
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      intro.classList.remove('fade-out');
+      intro.classList.add('hidden');
+      callback?.();
+    };
+
+    intro.addEventListener('transitionend', (e) => {
+      if (e.target === intro && e.propertyName === 'opacity') finish();
+    }, { once: true });
+    setTimeout(finish, 950);
+  }
+
   // ── Initial intro — progress only counts while tab is visible ───────────
   function onInitialTimeUpdate() {
     if (document.hidden || phase !== 'initial-intro') return;
@@ -96,13 +116,8 @@
     saoFinishHandler = null;
     video.removeEventListener('timeupdate', onInitialTimeUpdate);
     video.pause();
-    flashEl.classList.remove('flash');
-    void flashEl.offsetWidth;
-    flashEl.classList.add('flash');
-    setTimeout(() => {
-      intro.classList.add('hidden');
-      showGameSelect();
-    }, 300);
+    showGameSelect();
+    fadeOutIntro();
   }
 
   if (video) {
@@ -163,20 +178,19 @@
       phase = 'done';
       saoFinishHandler = null;
       video.pause();
-      flashEl.classList.remove('flash');
-      void flashEl.offsetWidth;
-      flashEl.classList.add('flash');
-      setTimeout(() => {
-        intro.classList.add('hidden');
-        applyTheme(themeId);
-        showPortfolio();
-      }, 300);
+      applyTheme(themeId);
+      mainEl.classList.remove('hidden');
+      if (window.initBackground) window.initBackground();
+      fadeOutIntro(() => {
+        if (window.initAnimations) window.initAnimations();
+        mainEl.classList.add('fade-in');
+      });
     }
 
     saoFinishHandler = finishSaoIntro;
 
     function revealAndPlay() {
-      intro.classList.remove('hidden');
+      intro.classList.remove('hidden', 'fade-out');
       video.addEventListener('timeupdate', onSaoTimeUpdate);
       video.addEventListener('ended', finishSaoIntro, { once: true });
       video.play().catch(finishSaoIntro);
